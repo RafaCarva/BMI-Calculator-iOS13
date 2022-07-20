@@ -10,7 +10,8 @@ import UIKit
 
 class CalculateViewController: UIViewController {
 
-    var bmiValue = "0.0"
+    
+    var calculatorBrain = CalculatorBrain()
     
     //Height Text
     @IBOutlet weak var height: UILabel!
@@ -38,12 +39,8 @@ class CalculateViewController: UIViewController {
         let height = heightSlider.value
         let weight = weightSlider.value
         
-        //BMI  Weight (Kg) / Height (m)²
-        let bmi = weight / pow(height, 2)
-        bmiValue = String(format: "%.1f", bmi)
+        calculatorBrain.calculateBMI(height: height, weight: weight)
         
-        //Função que vai chamar a outra view.
-        //"goToResult" é o nome do link entre as telas.
         self.performSegue(withIdentifier: "goToResult", sender: self)
 
     }
@@ -53,7 +50,9 @@ class CalculateViewController: UIViewController {
         if (segue.identifier == "goToResult"){
             
             let destinationVC = segue.destination as! ResultViewController
-            destinationVC.bmiValue = self.bmiValue
+            destinationVC.bmiValue = calculatorBrain.getBMIValue()
+            destinationVC.advice = calculatorBrain.getAdvice()
+            destinationVC.color = calculatorBrain.getColor()
         }
     }
 }
